@@ -14,7 +14,7 @@
 
 <H2>Downloading</H2>
 
-<P>The i386.rpm is for RedHat 6.0</P>
+<P>The i386.rpm is linked against glibc-2.2</P>
 
 <P>
 <LI><A HREF="which-!VERSION!.tar.gz">which-!VERSION!.tar.gz</A>
