@@ -14,7 +14,12 @@
 
 <H2>Downloading</H2>
 
-<LI><A HREF="which-2.2.tar.gz">which-2.2.tar.gz</A> (<A HREF="cvslog-2.2.html">ChangeLog since version 2.0</A>)
+<LI><A HREF="which-2.2.tar.gz">which-2.2.tar.gz</A>
+
+<H2>ChangeLog</H2>
+
+<LI><A HREF="cvslog-2.2.html">Version 2.2</A>
+<LI><A HREF="cvslog-2.1.html">Version 2.1</A>
 
 <H2>Manual page</H2>
 
