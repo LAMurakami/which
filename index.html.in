@@ -14,15 +14,13 @@
 
 <H2>Downloading</H2>
 
-<LI><A HREF="which-2.5.tar.gz">which-2.5.tar.gz</A>
+<LI><A HREF="which-@VERSION@.tar.gz">which-@VERSION@.tar.gz</A>
+<LI><A HREF="which-@VERSION@-1.i386.rpm">which-@VERSION@-1.i386.rpm</A>
+<LI><A HREF="which-@VERSION@-1.src.rpm">which-@VERSION@-1.src.rpm</A>
 
 <H2>ChangeLog</H2>
 
-<LI><A HREF="cvslog-2.5.html">Version 2.5</A>
-<LI><A HREF="cvslog-2.4.html">Version 2.4</A>
-<LI><A HREF="cvslog-2.3.html">Version 2.3</A>
-<LI><A HREF="cvslog-2.2.html">Version 2.2</A>
-<LI><A HREF="cvslog-2.1.html">Version 2.1</A>
+CHANGELOGLIST
 
 <H2>Manual page</H2>
 
