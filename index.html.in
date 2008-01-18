@@ -14,12 +14,8 @@
 
 <H2>Downloading</H2>
 
-<P>The i386.rpm is linked against glibc-2.3.2</P>
-
 <P>
 <LI><A HREF="which-!VERSION!.tar.gz">which-!VERSION!.tar.gz</A>
-<LI><A HREF="which-!VERSION!-1.i386.rpm">which-!VERSION!-1.i386.rpm</A>
-<LI><A HREF="which-!VERSION!-1.src.rpm">which-!VERSION!-1.src.rpm</A>
 </P>
 
 <P><LI><A HREF="which.lsm">which.lsm</A></P>
