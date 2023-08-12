@@ -37,7 +37,7 @@ dnl Checks for library functions.
 AC_TYPE_GETGROUPS
 AC_CHECK_FUNCS(strchr memcpy getopt_long getcwd getwd sysconf getgroups eaccess)
 
-if test "$ac_cv_lib_static_libiberty_a_xmalloc" = no \
+if test "$ac_cv_lib_iberty_xmalloc" = no \
      -o "$which_cv_iberty" = no ; then
   AC_DEFINE([NEED_XMALLOC], 1, [Define if you need xmalloc().])
 fi
