@@ -8,6 +8,8 @@ Makefile.in
 config.h
 config.h.in
 aclocal.m4
+config.sub
+config.guess
 configure
 config.log
 config.cache
@@ -38,6 +40,9 @@ mkinstalldirs
 /build/
 /test/.reference
 env.source
+m4/min_autoconf_version.m4
+m4/min_automake_version.m4
+m4/submodules.m4
 *.a
 *.exe
 *.obj
