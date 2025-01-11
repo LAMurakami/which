@@ -1,8 +1,7 @@
 #! /bin/bash
 umask 022
 export PATH=".:~/bin:/bin:/usr/bin"
-export HOME=`(cd ~; pwd)`
-alias whichtest="$HOME/c/which-objdir/which"
+alias whichtest="$BUILDDIR/which"
 
 touch cat; chmod 755 cat; pwd
 alias
