@@ -77,7 +77,7 @@ static void print_fail(const char *name, const char *path_list)
 static char home[PATH_MAX];
 static size_t homelen = 0;
 
-static int absolute_path_given;
+static int path_containing_separator_given;
 static int found_path_starts_with_dot;
 static char *abs_path;
 
@@ -92,12 +92,12 @@ static char *find_command_in_path(const char *name, const char *path_list, int *
 
   name_len = strlen(name);
 
-  if (!absolute_program(name))
-    absolute_path_given = 0;
+  if (!contains_separator(name))
+    path_containing_separator_given = 0;
   else
   {
     char *p;
-    absolute_path_given = 1;
+    path_containing_separator_given = 1;
 
     if (abs_path)
       free(abs_path);
@@ -124,7 +124,7 @@ static char *find_command_in_path(const char *name, const char *path_list, int *
   while (path_list && path_list[*path_index])
   {
     char *path;
-    if (absolute_path_given)
+    if (path_containing_separator_given)
     {
       path = savestring(path_list);
       *path_index = strlen(path);
@@ -721,7 +721,7 @@ int main(int argc, char *argv[])
 
     if ((show_all || !found_something) && !path_search(0, *argv, path_list) && !found_something)
     {
-      print_fail(absolute_path_given ? strrchr(*argv, DIR_SEPARATOR) + 1 : *argv, absolute_path_given ? abs_path : path_list);
+      print_fail(path_containing_separator_given ? strrchr(*argv, DIR_SEPARATOR) + 1 : *argv, path_containing_separator_given ? abs_path : path_list);
       ++fail_count;
     }
   }

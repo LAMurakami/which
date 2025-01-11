@@ -351,9 +351,9 @@ file_status (char const* name)
    contains any slashes.  This is used to decide whether or not to look
    up through $PATH. */
 int
-absolute_program (char const* string)
+contains_separator (char const* string)
 {
-	return IS_ABSOLUTE(string);
+  return CONTAINS_SEPARATOR(string);
 }
 
 /* From bash-4.3 / stringlib.c / line 124 */

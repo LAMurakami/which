@@ -61,35 +61,37 @@ extern void *xrealloc(void *ptr, size_t size);
 #include <sys/types.h>
 #include <ctype.h>
 
-#define stat				_stati64
-#define getcwd				_getcwd
-#define strdup				_strdup
-#define isatty				_isatty
-#define strtok_r            strtok_s
+#define stat			_stati64
+#define getcwd			_getcwd
+#define strdup			_strdup
+#define isatty			_isatty
+#define strtok_r                strtok_s
 
 #define PATH_SEPARATOR		';'
 #define DIR_SEPARATOR		'\\'
-#define IS_SLASH(c)			((c) == '/' || (c) == DIR_SEPARATOR)
+#define IS_SLASH(c)	        ((c) == '/' || (c) == DIR_SEPARATOR)
 #define SLASHES			"\\/"
 #define HAVE_DRIVE(n)		((n)[0] && (n)[1] == ':')
-#define IS_ABSOLUTE(n)        (IS_SLASH((n)[0]) || ((n)[0] && (n)[1] == ':'))
+#define IS_ABSOLUTE(n)          (IS_SLASH((n)[0]) || HAVE_DRIVE(n))
+#define CONTAINS_SEPARATOR(n)   (strchr(n, '/') != NULL || strchr(n, DIR_SEPARATOR) != NULL || HAVE_DRIVE(n))
 #define DEFAULT_HOMEDIR		"C:\\"
 #define STRSTR stristr
 #define STRCMP stricmp
 #define STRNCMP strnicmp
-#define CHAR_CMP(c1, c2) ( tolower(c1) == tolower(c2) )
+#define CHAR_CMP(c1, c2)        (tolower(c1) == tolower(c2))
 #else
-#define WIN32SYSTEM			0
+#define WIN32SYSTEM		0
 #define PATH_SEPARATOR		':'
 #define DIR_SEPARATOR		'/'
-#define IS_SLASH(c)			((c) == DIR_SEPARATOR)
+#define IS_SLASH(c)		((c) == DIR_SEPARATOR)
 #define SLASHES			"/"
-#define HAVE_DRIVE(n)         (0)
-#define IS_ABSOLUTE(n)        ((n)[0] == DIR_SEPARATOR)
+#define HAVE_DRIVE(n)           (0)
+#define IS_ABSOLUTE(n)          ((n)[0] == DIR_SEPARATOR)
+#define CONTAINS_SEPARATOR(n)   (strchr(n, DIR_SEPARATOR) != NULL)
 #define DEFAULT_HOMEDIR		"/"
 #define STRSTR strstr
 #define STRCMP strcmp
 #define STRNCMP strncmp
-#define CHAR_CMP(c1, c2) (c1 == c2)
+#define CHAR_CMP(c1, c2)        (c1 == c2)
 #endif /* _WIN32  */
-#define IS_DIRSEP			IS_SLASH
+#define IS_DIRSEP(c)		IS_SLASH(c)
