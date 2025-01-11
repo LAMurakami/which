@@ -36,6 +36,7 @@ missing
 mkinstalldirs
 *~
 /build/
+/test/.reference
 *.a
 *.exe
 *.obj
