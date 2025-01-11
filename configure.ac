@@ -25,9 +25,6 @@ if test "$which_cv_iberty" = yes ; then
 fi
 
 dnl Checks for header files.
-AC_CHECK_INCLUDES_DEFAULT
-AC_PROG_EGREP
-
 AC_CHECK_HEADERS(unistd.h string.h libiberty.h)
 AC_HEADER_STAT
 
