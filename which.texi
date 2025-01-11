@@ -19,11 +19,11 @@ This file documents `which' version 2.x@.
 @c !END INTRO
 
 @c !BEGIN COPYING
-Copyright @copyright{} 2000 - 2015, by
+Copyright @copyright{} 2000 - 2025, by
 
-Carlo Wood, Run on IRC <carlo@@alinoe.com>
-RSA-1024 0x624ACAD5 1997-01-26                    Sign & Encrypt
-Fingerprint16 = 32 EC A7 B6 AC DB 65 A6  F6 F6 55 DD 1C DC FF 61
+Carlo Wood (CarloWood on Libera) <carlo@alinoe.com>
+dsa3072/0xC155A4EEE4E527A2 2018-08-16 [SC]
+Key fingerprint = 8DB9 1C65 A246 B7B6 73C0  18E7 9F52 AAAF 907E 1906
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -58,11 +58,11 @@ original English.
 @c !END AUTHORS
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 2000 - 2015, by
+Copyright @copyright{} 2000 - 2025, by
 
-Carlo Wood, Run on IRC <carlo@@alinoe.com>
-RSA-1024 0x624ACAD5 1997-01-26                    Sign & Encrypt
-Fingerprint16 = 32 EC A7 B6 AC DB 65 A6  F6 F6 55 DD 1C DC FF 61
+Carlo Wood (CarloWood on Libera) <carlo@alinoe.com>
+dsa3072/0xC155A4EEE4E527A2 2018-08-16 [SC]
+Key fingerprint = 8DB9 1C65 A246 B7B6 73C0  18E7 9F52 AAAF 907E 1906
 
 @end titlepage
 
@@ -252,7 +252,7 @@ used from a script:
 @group
 > which q2
 ~/bin/q2
-> echo `which q2`
+> echo $(which q2)
 /home/carlo/bin/q2
 @end group
 @end example
