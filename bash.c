@@ -105,7 +105,7 @@ uidget ()
   return (current_user.uid != current_user.euid) ||
            (current_user.gid != current_user.egid);
 #else
-	return 2;
+  return 2;
 #endif
 }
 
@@ -296,7 +296,7 @@ file_status (char const* name)
     {
       r |= FS_READABLE;
 
-#ifdef S_IXGRP
+#ifdef S_IXUGO
       if (finfo.st_mode & S_IXUGO)
 	r |= FS_EXECABLE;
 #endif
@@ -508,6 +508,6 @@ char* sh_get_home_dir(void)
   return get_home_dir();
 }
 int geteuid(void){
-	return 2;
+  return 2;
 }
 #endif
