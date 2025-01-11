@@ -37,6 +37,7 @@ mkinstalldirs
 *~
 /build/
 /test/.reference
+env.source
 *.a
 *.exe
 *.obj
