@@ -245,10 +245,25 @@ group_member (gid)
   return (0);
 }
 
-/* From bash-4.3 / findcmd.c / line 80 */
+/* From bash-5.2 / findcmd.h / line 98 */
+static int
+exec_name_should_ignore (const char *name)
+{
+  // GNU which does not support the EXECIGNORE.
+#if 0
+  struct ign *p;
+
+  for (p = execignore.ignores; p && p->val; p++)
+    if (strmatch (p->val, (char *)name, FNMATCH_EXTFLAG|FNM_CASEFOLD) != FNM_NOMATCH)
+      return 1;
+#endif
+  return 0;
+}
+
+/* From bash-5.2 / findcmd.h / line 110 */
 /* Return some flags based on information about this file.
    The EXISTS bit is non-zero if the file is found.
-   The EXECABLE bit is non-zero the file is executble.
+   The EXECABLE bit is non-zero the file is executable.
    Zero is returned if the file is not found. */
 int
 file_status (char const* name)
@@ -272,7 +287,7 @@ file_status (char const* name)
      file access mechanisms into account.  eaccess uses the effective
      user and group IDs, not the real ones.  We could use sh_eaccess,
      but we don't want any special treatment for /dev/fd. */
-  if (eaccess (name, X_OK) == 0)
+  if (exec_name_should_ignore (name) == 0 && eaccess (name, X_OK) == 0)
     r |= FS_EXECABLE;
   if (eaccess (name, R_OK) == 0)
     r |= FS_READABLE;
@@ -282,13 +297,13 @@ file_status (char const* name)
   /* We have to use access(2) to determine access because AFS does not
      support Unix file system semantics.  This may produce wrong
      answers for non-AFS files when ruid != euid.  I hate AFS. */
-  if (access (name, X_OK) == 0)
+  if (exec_name_should_ignore (name) == 0 && access (name, X_OK) == 0)
     r |= FS_EXECABLE;
   if (access (name, R_OK) == 0)
     r |= FS_READABLE;
 
   return r;
-#else /* !AFS */
+#else /* !HAVE_EACCESS && !AFS */
 
   /* Find out if the file is actually executable.  By definition, the
      only other criteria is that the file has an execute bit set that
@@ -301,7 +316,7 @@ file_status (char const* name)
       r |= FS_READABLE;
 
 #ifdef S_IXUGO
-      if (finfo.st_mode & S_IXUGO)
+      if (exec_name_should_ignore (name) == 0 && (finfo.st_mode & S_IXUGO))
 	r |= FS_EXECABLE;
 #endif
       return r;
@@ -310,7 +325,7 @@ file_status (char const* name)
   /* If we are the owner of the file, the owner bits apply. */
   if (current_user.euid == finfo.st_uid)
     {
-      if (finfo.st_mode & S_IXUSR)
+      if (exec_name_should_ignore (name) == 0 && (finfo.st_mode & S_IXUSR))
 	r |= FS_EXECABLE;
       if (finfo.st_mode & S_IRUSR)
 	r |= FS_READABLE;
@@ -320,7 +335,7 @@ file_status (char const* name)
   else if (group_member (finfo.st_gid))
     {
 #ifdef S_IXGRP
-      if (finfo.st_mode & S_IXGRP)
+      if (exec_name_should_ignore (name) == 0 && (finfo.st_mode & S_IXGRP))
 	r |= FS_EXECABLE;
 #endif
 #ifdef S_IRGRP
@@ -333,7 +348,7 @@ file_status (char const* name)
   else
     {
 #ifdef S_IXOTH
-      if (finfo.st_mode & S_IXOTH)
+      if (exec_name_should_ignore (name) == 0 && finfo.st_mode & S_IXOTH)
 	r |= FS_EXECABLE;
 #endif
 #ifdef S_IROTH
@@ -346,7 +361,7 @@ file_status (char const* name)
 #endif /* !AFS */
 }
 
-/* From bash-4.3 / general.c / line 604 ; Changes: Using 'strchr' instead of 'mbschr'. */
+/* From bash-5.2 / general.c / line 810 ; Changes: Using 'strchr' instead of 'mbschr'. */
 /* Return 1 if STRING is an absolute program name; it is absolute if it
    contains any slashes.  This is used to decide whether or not to look
    up through $PATH. */
