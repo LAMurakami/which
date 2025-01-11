@@ -21,7 +21,7 @@
 
 #include "sys.h"
 #include "posixstat.h"
-#if defined (HAVE_PWD_H)
+#if defined(HAVE_PWD_H)
 #include <pwd.h>
 #endif
 #ifndef _WIN32
@@ -29,7 +29,7 @@
 #endif
 #include "bash.h"
 
-#if defined (HAVE_EACCESS)
+#if defined(HAVE_EACCESS)
 int eaccess(const char *pathname, int mode);
 #endif
 
@@ -54,7 +54,7 @@ int eaccess(const char *pathname, int mode);
  * - changed all occurences of 'gid_t' into 'GID_T'.
  * - exported functions needed in which.c
  */
-static char* extract_colon_unit (char const* string, int* p_index);
+static char *extract_colon_unit(char const *string, int *p_index);
 
 /*===========================================================================
  *
@@ -68,46 +68,47 @@ struct user_info {
   uid_t uid, euid;
   GID_T gid, egid;
   char *user_name;
-  char *shell;          /* shell from the password file */
+  char *shell; /* shell from the password file */
   char *home_dir;
 };
 
 /* From bash-4.3 / shell.c / line 116 */
 /* Information about the current user. */
-struct user_info current_user =
-{
-  (uid_t)-1, (uid_t)-1, (GID_T)-1, (GID_T)-1,
-  (char *)NULL, (char *)NULL, (char *)NULL
-};
+struct user_info current_user = {(uid_t) -1,    (uid_t) -1,    (GID_T) -1,   (GID_T) -1,
+                                 (char *) NULL, (char *) NULL, (char *) NULL};
 
 /* From bash-4.3 / general.h / line 153 */
-#define FREE(s)  do { if (s) free (s); } while (0)
+#define FREE(s)                                                                                                        \
+  do                                                                                                                   \
+  {                                                                                                                    \
+    if (s)                                                                                                             \
+      free(s);                                                                                                         \
+  }                                                                                                                    \
+  while (0)
 
 /* From bash-4.3 / shell.c / line 1201 */
 /* Fetch the current set of uids and gids and return 1 if we're running
    setuid or setgid. */
-int
-uidget ()
+int uidget()
 {
 #ifndef _WIN32
   uid_t u;
 
-  u = getuid ();
+  u = getuid();
   if (current_user.uid != u)
-    {
-      FREE (current_user.user_name);
-      FREE (current_user.shell);
-      FREE (current_user.home_dir);
-      current_user.user_name = current_user.shell = current_user.home_dir = (char *)NULL;
-    }
+  {
+    FREE(current_user.user_name);
+    FREE(current_user.shell);
+    FREE(current_user.home_dir);
+    current_user.user_name = current_user.shell = current_user.home_dir = (char *) NULL;
+  }
   current_user.uid = u;
-  current_user.gid = getgid ();
-  current_user.euid = geteuid ();
-  current_user.egid = getegid ();
+  current_user.gid = getgid();
+  current_user.euid = geteuid();
+  current_user.egid = getegid();
 
   /* See whether or not we are running setuid or setgid. */
-  return (current_user.uid != current_user.euid) ||
-           (current_user.gid != current_user.egid);
+  return (current_user.uid != current_user.euid) || (current_user.gid != current_user.egid);
 #else
   return 2;
 #endif
@@ -118,37 +119,36 @@ static int ngroups, maxgroups;
 
 /* From bash-4.3 / general.c / line 1020 */
 /* The set of groups that this user is a member of. */
-static GETGROUPS_T *group_array = (GETGROUPS_T *)NULL;
+static GETGROUPS_T *group_array = (GETGROUPS_T *) NULL;
 
 /* From bash-4.3 / general.c / line 1023 */
-#if !defined (NOGROUP)
-#  define NOGROUP (GID_T) -1
+#if !defined(NOGROUP)
+#define NOGROUP (GID_T) - 1
 #endif
 
 /* From bash-4.3 / lib/sh/oslib.c / line 250 */
 #define DEFAULT_MAXGROUPS 64
 
 /* From bash-4.3 / lib/sh/oslib.c / line 252 */
-int
-getmaxgroups ()
+int getmaxgroups()
 {
   static int maxgroups = -1;
 
   if (maxgroups > 0)
     return maxgroups;
 
-#if defined (HAVE_SYSCONF) && defined (_SC_NGROUPS_MAX)
-  maxgroups = sysconf (_SC_NGROUPS_MAX);
+#if defined(HAVE_SYSCONF) && defined(_SC_NGROUPS_MAX)
+  maxgroups = sysconf(_SC_NGROUPS_MAX);
 #else
-#  if defined (NGROUPS_MAX)
+#if defined(NGROUPS_MAX)
   maxgroups = NGROUPS_MAX;
-#  else /* !NGROUPS_MAX */
-#    if defined (NGROUPS)
+#else /* !NGROUPS_MAX */
+#if defined(NGROUPS)
   maxgroups = NGROUPS;
-#    else /* !NGROUPS */
+#else  /* !NGROUPS */
   maxgroups = DEFAULT_MAXGROUPS;
-#    endif /* !NGROUPS */
-#  endif /* !NGROUPS_MAX */
+#endif /* !NGROUPS */
+#endif /* !NGROUPS_MAX */
 #endif /* !HAVE_SYSCONF || !SC_NGROUPS_MAX */
 
   if (maxgroups <= 0)
@@ -158,69 +158,68 @@ getmaxgroups ()
 }
 
 /* From bash-4.3 / general.c / line 1027 */
-static void
-initialize_group_array ()
+static void initialize_group_array()
 {
   register int i;
 
   if (maxgroups == 0)
-    maxgroups = getmaxgroups ();
+    maxgroups = getmaxgroups();
 
   ngroups = 0;
-  group_array = (GETGROUPS_T *)xrealloc (group_array, maxgroups * sizeof (GETGROUPS_T));
+  group_array = (GETGROUPS_T *) xrealloc(group_array, maxgroups * sizeof(GETGROUPS_T));
 
-#if defined (HAVE_GETGROUPS)
-  ngroups = getgroups (maxgroups, group_array);
+#if defined(HAVE_GETGROUPS)
+  ngroups = getgroups(maxgroups, group_array);
 #endif
 
   /* If getgroups returns nothing, or the OS does not support getgroups(),
      make sure the groups array includes at least the current gid. */
   if (ngroups == 0)
-    {
-      group_array[0] = current_user.gid;
-      ngroups = 1;
-    }
+  {
+    group_array[0] = current_user.gid;
+    ngroups = 1;
+  }
 
   /* If the primary group is not in the groups array, add it as group_array[0]
      and shuffle everything else up 1, if there's room. */
   for (i = 0; i < ngroups; i++)
-    if (current_user.gid == (GID_T)group_array[i])
+    if (current_user.gid == (GID_T) group_array[i])
       break;
   if (i == ngroups && ngroups < maxgroups)
-    {
-      for (i = ngroups; i > 0; i--)
-        group_array[i] = group_array[i - 1];
-      group_array[0] = current_user.gid;
-      ngroups++;
-    }
+  {
+    for (i = ngroups; i > 0; i--)
+      group_array[i] = group_array[i - 1];
+    group_array[0] = current_user.gid;
+    ngroups++;
+  }
 
   /* If the primary group is not group_array[0], swap group_array[0] and
      whatever the current group is.  The vast majority of systems should
      not need this; a notable exception is Linux. */
   if (group_array[0] != current_user.gid)
+  {
+    for (i = 0; i < ngroups; i++)
+      if (group_array[i] == current_user.gid)
+        break;
+    if (i < ngroups)
     {
-      for (i = 0; i < ngroups; i++)
-        if (group_array[i] == current_user.gid)
-          break;
-      if (i < ngroups)
-        {
-          group_array[i] = group_array[0];
-          group_array[0] = current_user.gid;
-        }
+      group_array[i] = group_array[0];
+      group_array[0] = current_user.gid;
     }
+  }
 }
 
 /* From bash-4.3 / general.c / line 1079 */
 /* Return non-zero if GID is one that we have in our groups list. */
 int
-#if defined (__STDC__) || defined ( _MINIX)
+#if defined(__STDC__) || defined(_MINIX)
 group_member (GID_T gid)
 #else
 group_member (gid)
-     GID_T gid;
+GID_T gid;
 #endif /* !__STDC__ && !_MINIX */
 {
-#if defined (HAVE_GETGROUPS)
+#if defined(HAVE_GETGROUPS)
   register int i;
 #endif
 
@@ -228,9 +227,9 @@ group_member (gid)
   if (gid == current_user.gid || gid == current_user.egid)
     return (1);
 
-#if defined (HAVE_GETGROUPS)
+#if defined(HAVE_GETGROUPS)
   if (ngroups == 0)
-    initialize_group_array ();
+    initialize_group_array();
 
   /* In case of error, the user loses. */
   if (ngroups <= 0)
@@ -238,7 +237,7 @@ group_member (gid)
 
   /* Search through the list looking for GID. */
   for (i = 0; i < ngroups; i++)
-    if (gid == (GID_T)group_array[i])
+    if (gid == (GID_T) group_array[i])
       return (1);
 #endif
 
@@ -246,8 +245,7 @@ group_member (gid)
 }
 
 /* From bash-5.2 / findcmd.h / line 98 */
-static int
-exec_name_should_ignore (const char *name)
+static int exec_name_should_ignore(const char *name)
 {
   // GNU which does not support the EXECIGNORE.
 #if 0
@@ -265,41 +263,40 @@ exec_name_should_ignore (const char *name)
    The EXISTS bit is non-zero if the file is found.
    The EXECABLE bit is non-zero the file is executable.
    Zero is returned if the file is not found. */
-int
-file_status (char const* name)
+int file_status(char const *name)
 {
   struct stat finfo;
   int r;
 
   /* Determine whether this file exists or not. */
-  if (stat (name, &finfo) < 0)
+  if (stat(name, &finfo) < 0)
     return (0);
 
   /* If the file is a directory, then it is not "executable" in the
      sense of the shell. */
-  if (S_ISDIR (finfo.st_mode))
-    return (FS_EXISTS|FS_DIRECTORY);
+  if (S_ISDIR(finfo.st_mode))
+    return (FS_EXISTS | FS_DIRECTORY);
 
   r = FS_EXISTS;
 
-#if defined (HAVE_EACCESS)
+#if defined(HAVE_EACCESS)
   /* Use eaccess(2) if we have it to take things like ACLs and other
      file access mechanisms into account.  eaccess uses the effective
      user and group IDs, not the real ones.  We could use sh_eaccess,
      but we don't want any special treatment for /dev/fd. */
-  if (exec_name_should_ignore (name) == 0 && eaccess (name, X_OK) == 0)
+  if (exec_name_should_ignore(name) == 0 && eaccess(name, X_OK) == 0)
     r |= FS_EXECABLE;
-  if (eaccess (name, R_OK) == 0)
+  if (eaccess(name, R_OK) == 0)
     r |= FS_READABLE;
 
   return r;
-#elif defined (AFS)
+#elif defined(AFS)
   /* We have to use access(2) to determine access because AFS does not
      support Unix file system semantics.  This may produce wrong
      answers for non-AFS files when ruid != euid.  I hate AFS. */
-  if (exec_name_should_ignore (name) == 0 && access (name, X_OK) == 0)
+  if (exec_name_should_ignore(name) == 0 && access(name, X_OK) == 0)
     r |= FS_EXECABLE;
-  if (access (name, R_OK) == 0)
+  if (access(name, R_OK) == 0)
     r |= FS_READABLE;
 
   return r;
@@ -311,51 +308,51 @@ file_status (char const* name)
 
   /* Root only requires execute permission for any of owner, group or
      others to be able to exec a file, and can read any file. */
-  if (current_user.euid == (uid_t)0)
-    {
-      r |= FS_READABLE;
+  if (current_user.euid == (uid_t) 0)
+  {
+    r |= FS_READABLE;
 
 #ifdef S_IXUGO
-      if (exec_name_should_ignore (name) == 0 && (finfo.st_mode & S_IXUGO))
-	r |= FS_EXECABLE;
+    if (exec_name_should_ignore(name) == 0 && (finfo.st_mode & S_IXUGO))
+      r |= FS_EXECABLE;
 #endif
-      return r;
-    }
+    return r;
+  }
 
   /* If we are the owner of the file, the owner bits apply. */
   if (current_user.euid == finfo.st_uid)
-    {
-      if (exec_name_should_ignore (name) == 0 && (finfo.st_mode & S_IXUSR))
-	r |= FS_EXECABLE;
-      if (finfo.st_mode & S_IRUSR)
-	r |= FS_READABLE;
-    }
+  {
+    if (exec_name_should_ignore(name) == 0 && (finfo.st_mode & S_IXUSR))
+      r |= FS_EXECABLE;
+    if (finfo.st_mode & S_IRUSR)
+      r |= FS_READABLE;
+  }
 
   /* If we are in the owning group, the group permissions apply. */
-  else if (group_member (finfo.st_gid))
-    {
+  else if (group_member(finfo.st_gid))
+  {
 #ifdef S_IXGRP
-      if (exec_name_should_ignore (name) == 0 && (finfo.st_mode & S_IXGRP))
-	r |= FS_EXECABLE;
+    if (exec_name_should_ignore(name) == 0 && (finfo.st_mode & S_IXGRP))
+      r |= FS_EXECABLE;
 #endif
 #ifdef S_IRGRP
-      if (finfo.st_mode & S_IRGRP)
-	r |= FS_READABLE;
+    if (finfo.st_mode & S_IRGRP)
+      r |= FS_READABLE;
 #endif
-    }
+  }
 
   /* Else we check whether `others' have permission to execute the file */
   else
-    {
+  {
 #ifdef S_IXOTH
-      if (exec_name_should_ignore (name) == 0 && finfo.st_mode & S_IXOTH)
-	r |= FS_EXECABLE;
+    if (exec_name_should_ignore(name) == 0 && finfo.st_mode & S_IXOTH)
+      r |= FS_EXECABLE;
 #endif
 #ifdef S_IROTH
-      if (finfo.st_mode & S_IROTH)
-	r |= FS_READABLE;
+    if (finfo.st_mode & S_IROTH)
+      r |= FS_READABLE;
 #endif
-    }
+  }
 
   return r;
 #endif /* !AFS */
@@ -365,8 +362,7 @@ file_status (char const* name)
 /* Return 1 if STRING is an absolute program name; it is absolute if it
    contains any slashes.  This is used to decide whether or not to look
    up through $PATH. */
-int
-contains_separator (char const* string)
+int contains_separator(char const *string)
 {
   return CONTAINS_SEPARATOR(string);
 }
@@ -374,15 +370,14 @@ contains_separator (char const* string)
 /* From bash-4.3 / stringlib.c / line 124 */
 /* Cons a new string from STRING starting at START and ending at END,
    not including END. */
-char *
-substring (char const* string, int start, int end)
+char *substring(char const *string, int start, int end)
 {
   register int len;
   register char *result;
 
   len = end - start;
-  result = (char *)xmalloc (len + 1);
-  memcpy (result, string + start, len);
+  result = (char *) xmalloc(len + 1);
+  memcpy(result, string + start, len);
   result[len] = '\0';
   return (result);
 }
@@ -391,8 +386,7 @@ substring (char const* string, int start, int end)
 /* Given a string containing units of information separated by colons,
    return the next one pointed to by (P_INDEX), or NULL if there are no more.
    Advance (P_INDEX) to the character after the colon. */
-char*
-extract_colon_unit (char const* string, int* p_index)
+char *extract_colon_unit(char const *string, int *p_index)
 {
   int i, start, len;
   char *value;
@@ -400,9 +394,9 @@ extract_colon_unit (char const* string, int* p_index)
   if (string == 0)
     return NULL;
 
-  len = strlen (string);
+  len = strlen(string);
   if (*p_index >= len)
-    return ((char *)NULL);
+    return ((char *) NULL);
 
   i = *p_index;
 
@@ -420,15 +414,15 @@ extract_colon_unit (char const* string, int* p_index)
   *p_index = i;
 
   if (i == start)
-    {
-      if (string[i])
-        (*p_index)++;
-      /* Return "" in the case of a trailing PATH_SEPARATOR (`:' resp. ';'). */
-      value = (char *)xmalloc (1);
-      value[0] = '\0';
-    }
+  {
+    if (string[i])
+      (*p_index)++;
+    /* Return "" in the case of a trailing PATH_SEPARATOR (`:' resp. ';'). */
+    value = (char *) xmalloc(1);
+    value[0] = '\0';
+  }
   else
-    value = substring (string, start, i);
+    value = substring(string, start, i);
 
   return (value);
 }
@@ -438,21 +432,20 @@ extract_colon_unit (char const* string, int* p_index)
    paths.  PATH_INDEX_POINTER is the address of an index into PATH_LIST;
    the index is modified by this function.
    Return the next element of PATH_LIST or NULL if there are no more. */
-char*
-get_next_path_element (char const* path_list, int* path_index_pointer)
+char *get_next_path_element(char const *path_list, int *path_index_pointer)
 {
-  char* path;
+  char *path;
 
-  path = extract_colon_unit (path_list, path_index_pointer);
+  path = extract_colon_unit(path_list, path_index_pointer);
 
   if (path == 0)
     return (path);
 
   if (*path == '\0')
-    {
-      free (path);
-      path = savestring (".");
-    }
+  {
+    free(path);
+    path = savestring(".");
+  }
 
   return (path);
 }
@@ -460,61 +453,58 @@ get_next_path_element (char const* path_list, int* path_index_pointer)
 /* From bash-1.14.7 */
 /* Turn PATH, a directory, and NAME, a filename, into a full pathname.
    This allocates new memory and returns it. */
-char *
-make_full_pathname (const char *path, const char *name, int name_len)
+char *make_full_pathname(const char *path, const char *name, int name_len)
 {
   char *full_path;
   int path_len;
 
-  path_len = strlen (path);
-  full_path = (char *) xmalloc (2 + path_len + name_len);
-  strcpy (full_path, path);
+  path_len = strlen(path);
+  full_path = (char *) xmalloc(2 + path_len + name_len);
+  strcpy(full_path, path);
   full_path[path_len] = DIR_SEPARATOR;
-  strcpy (full_path + path_len + 1, name);
+  strcpy(full_path + path_len + 1, name);
   return (full_path);
 }
 #ifndef _WIN32
 /* From bash-4.3 / shell.c / line 1659 */
-void
-get_current_user_info ()
+void get_current_user_info()
 {
   struct passwd *entry;
 
   /* Don't fetch this more than once. */
   if (current_user.user_name == 0)
-    {
-#if defined (__TANDEM)
-      entry = getpwnam (getlogin ());
+  {
+#if defined(__TANDEM)
+    entry = getpwnam(getlogin());
 #else
-      entry = getpwuid (current_user.uid);
+    entry = getpwuid(current_user.uid);
 #endif
-      if (entry)
-        {
-          current_user.user_name = savestring (entry->pw_name);
-          current_user.shell = (entry->pw_shell && entry->pw_shell[0])
-                                ? savestring (entry->pw_shell)
-                                : savestring ("/bin/sh");
-          current_user.home_dir = savestring (entry->pw_dir);
-        }
-      else
-        {
-          current_user.user_name = "I have no name!";
-          current_user.user_name = savestring (current_user.user_name);
-          current_user.shell = savestring ("/bin/sh");
-          current_user.home_dir = savestring ("/");
-        }
-      endpwent ();
+    if (entry)
+    {
+      current_user.user_name = savestring(entry->pw_name);
+      current_user.shell =
+          (entry->pw_shell && entry->pw_shell[0]) ? savestring(entry->pw_shell) : savestring("/bin/sh");
+      current_user.home_dir = savestring(entry->pw_dir);
     }
+    else
+    {
+      current_user.user_name = "I have no name!";
+      current_user.user_name = savestring(current_user.user_name);
+      current_user.shell = savestring("/bin/sh");
+      current_user.home_dir = savestring("/");
+    }
+    endpwent();
+  }
 }
 #endif
 
 /* This is present for use by the tilde library. */
-char* sh_get_env_value (const char* v)
+char *sh_get_env_value(const char *v)
 {
   return getenv(v);
 }
 #ifndef _WIN32
-char* sh_get_home_dir(void)
+char *sh_get_home_dir(void)
 {
   if (current_user.home_dir == NULL)
     get_current_user_info();
@@ -522,11 +512,12 @@ char* sh_get_home_dir(void)
 }
 
 #else
-char* sh_get_home_dir(void)
+char *sh_get_home_dir(void)
 {
   return get_home_dir();
 }
-int geteuid(void){
+int geteuid(void)
+{
   return 2;
 }
 #endif

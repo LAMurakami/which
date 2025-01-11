@@ -20,14 +20,14 @@
    along with Readline.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#if !defined (_TILDE_H_)
-#  define _TILDE_H_
+#if !defined(_TILDE_H_)
+#define _TILDE_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef char *tilde_hook_func_t (char *);
+typedef char *tilde_hook_func_t(char *);
 
 /* If non-null, this contains the address of a function that the application
    wants called before trying the standard tilde expansions.  The function
@@ -52,14 +52,14 @@ extern char **tilde_additional_prefixes;
 extern char **tilde_additional_suffixes;
 
 /* Return a new string which is the result of tilde expanding STRING. */
-extern char *tilde_expand (const char *);
+extern char *tilde_expand(const char *);
 
 /* Do the work of tilde expansion on FILENAME.  FILENAME starts with a
    tilde.  If there is no expansion, call tilde_expansion_failure_hook. */
-extern char *tilde_expand_word (const char *);
+extern char *tilde_expand_word(const char *);
 
 /* Find the portion of the string beginning with ~ that should be expanded. */
-extern char *tilde_find_word (const char *, int, int *);
+extern char *tilde_find_word(const char *, int, int *);
 
 #ifdef __cplusplus
 }
