@@ -26,6 +26,9 @@
 #endif
 #ifndef _WIN32
 #include <unistd.h>
+#else
+#include <windows.h>
+#include <shlobj_core.h>
 #endif
 #include "bash.h"
 
@@ -514,7 +517,12 @@ char *sh_get_home_dir(void)
 #else
 char *sh_get_home_dir(void)
 {
-  return get_home_dir();
+  char *home_dir = xmalloc(sizeof(char) * (MAX_PATH));
+  if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, home_dir)))
+  {
+    free(home_dir);
+    home_dir = NULL;
+  }
 }
 int geteuid(void)
 {
