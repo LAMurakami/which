@@ -94,7 +94,6 @@ release: dist html NEWS
 	@echo "*** To upload run:"
 	@echo "$$ ncftpput ftp-upload.gnu.org /incoming/ftp @PACKAGE@-@VERSION@.tar.gz @PACKAGE@-@VERSION@.tar.gz.asc @PACKAGE@-@VERSION@.tar.gz.directive.asc"
 	@echo "$$ echo \"$(TAG)\" > $(srcdir)/.prevtag"
-	@echo "$$ date +%s > $(srcdir)/.release_second"
 
 ##-----------------------------------------------------------------------------
 ## `which' specific generation:
