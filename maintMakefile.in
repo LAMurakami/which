@@ -109,7 +109,7 @@ html: EXAMPLES $(srcdir)/index.html.in $(srcdir)/configure.ac
 	grep -A2000 '^EXAMPLES' $(srcdir)/index.html.in | grep -v '^EXAMPLES' >> index.html
 
 EXAMPLES: which
-	( cd test; $(WHICHTEST) check; ) || exit -1;
+	( cd test; $(WHICHTEST) check; ) || exit 1;
 	( cd test; $(WHICHTEST) generate; )
 	cp $(srcdir)/test/.reference EXAMPLES
 
