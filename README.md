@@ -39,7 +39,7 @@ sources directly there are a couple extra steps to compile.
 git submodule update --init --recursive
 in the root of the project.
 
-   Next run `autoreconf -si` in the which root to generate the
+   Next run `./autogen.sh` in the which root to generate the
 install scripts.
 
    You must run configure with `--enable-maintainer-mode` the first time
