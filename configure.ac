@@ -37,6 +37,9 @@ if test "$which_cv_iberty" = yes ; then
     [AC_DEFINE([NEED_XMALLOC], [1], [Define if xmalloc is not available in libiberty])])
 fi
 
+# Checks for windows GetProfilesDirectoryA
+AC_SEARCH_LIBS([GetProfilesDirectoryA], [userenv])
+
 # Checks for header files.
 AC_CHECK_HEADERS(unistd.h string.h libiberty.h)
 AC_HEADER_STAT

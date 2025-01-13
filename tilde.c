@@ -49,6 +49,10 @@
 #include <pwd.h>
 #endif
 
+#ifdef _WIN32
+#include <userenv.h>
+#endif
+
 #include "tilde.h"
 
 #if defined(TEST) || defined(STATIC_MALLOC)
@@ -386,6 +390,25 @@ char *tilde_expand_word(const char *filename)
         free(expansion);
       }
     }
+#ifdef _WIN32
+    if (dirname == 0)
+    {
+      char profile_dir[MAX_PATH];
+      DWORD size = MAX_PATH;
+      if (GetProfilesDirectoryA(profile_dir, &size))
+      {
+        if ((strlen(profile_dir) + strlen(username)) < (MAX_PATH - 1))
+        {
+          profile_dir[strlen(profile_dir) + 1] = 0;
+          profile_dir[strlen(profile_dir)] = DIR_SEPARATOR;
+
+          strcat(profile_dir, username);
+          dirname = savestring(profile_dir);
+        }
+      }
+    }
+#endif // _WIN32
+
     /* If we don't have a failure hook, or if the failure hook did not
        expand the tilde, return a copy of what we were passed. */
     if (dirname == 0)
