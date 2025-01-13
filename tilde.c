@@ -235,7 +235,7 @@ char *tilde_expand(const char *string)
 #if defined(__CYGWIN__) || defined(_WIN32)
     /* Fix for Cygwin to prevent ~user/xxx from expanding to //xxx when
        $HOME for `user' is /.  On cygwin, // denotes a network drive. */
-    if (len > 1 || !IS_DIRSEP(*expansion) || IS_DIRSEP(*string))
+    if (len > 1 || !IS_DIRSEP(*expansion) || !IS_DIRSEP(*string))
 #endif
     {
       if ((result_index + len + 1) > result_size)
@@ -337,10 +337,10 @@ char *tilde_expand_word(const char *filename)
   if (filename[1] == '\0' || IS_DIRSEP(filename[1]))
   {
     /* Prefix $HOME to the rest of the string. */
-    expansion = sh_get_env_value("HOME");
+    expansion = sh_get_env_value("HOME"); // not normally set in windows, but set by cygin/msys
 #if defined(_WIN32)
     if (expansion == 0)
-      expansion = sh_get_env_value("APPDATA");
+      expansion = sh_get_env_value("USERPROFILE"); // what windows sets for the users homedir
 #endif
 
     /* If there is no HOME variable, look up the directory in

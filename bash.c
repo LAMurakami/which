@@ -518,11 +518,12 @@ char *sh_get_home_dir(void)
 char *sh_get_home_dir(void)
 {
   char *home_dir = xmalloc(sizeof(char) * (MAX_PATH));
-  if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, home_dir)))
+  if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PROFILE, NULL, 0, home_dir)))
   {
     free(home_dir);
     home_dir = NULL;
   }
+  return (home_dir);
 }
 int geteuid(void)
 {
