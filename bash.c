@@ -334,11 +334,11 @@ int file_status(char const *name)
   /* If we are in the owning group, the group permissions apply. */
   else if (group_member(finfo.st_gid))
   {
-#ifdef S_IXGRP
+#if !defined(_WIN32) || defined(S_IXGRP)
     if (exec_name_should_ignore(name) == 0 && (finfo.st_mode & S_IXGRP))
       r |= FS_EXECABLE;
 #endif
-#ifdef S_IRGRP
+#if !defined(_WIN32) || defined(S_IRGRP)
     if (finfo.st_mode & S_IRGRP)
       r |= FS_READABLE;
 #endif
@@ -347,11 +347,11 @@ int file_status(char const *name)
   /* Else we check whether `others' have permission to execute the file */
   else
   {
-#ifdef S_IXOTH
+#if !defined(_WIN32) || defined(S_IXOTH)
     if (exec_name_should_ignore(name) == 0 && finfo.st_mode & S_IXOTH)
       r |= FS_EXECABLE;
 #endif
-#ifdef S_IROTH
+#if !defined(_WIN32) || defined(S_IROTH)
     if (finfo.st_mode & S_IROTH)
       r |= FS_READABLE;
 #endif
