@@ -464,8 +464,9 @@ char *make_full_pathname(const char *path, const char *name, int name_len)
   path_len = strlen(path);
   full_path = (char *) xmalloc(2 + path_len + name_len);
   strcpy(full_path, path);
-  full_path[path_len] = DIR_SEPARATOR;
-  strcpy(full_path + path_len + 1, name);
+  if (path_len > 0 && !IS_DIRSEP(full_path[path_len - 1]))
+    full_path[path_len++] = DIR_SEPARATOR;
+  strcpy(full_path + path_len, name);
   return (full_path);
 }
 #ifndef _WIN32
