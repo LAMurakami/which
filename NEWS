@@ -1,3 +1,7 @@
+Version 2.22 --> 2.23
+
+* Bug fix; cleaning up a path like "/path/a/../b/foo" before printing was broken in 2.22.
+
 Version 2.21 --> 2.22
 
 * Improved Windows support (by Mitch Capper).
