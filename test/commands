@@ -98,3 +98,8 @@ which test1
 which test2
 which test3
 which test4
+
+mkdir -p {a,b}
+touch b/test
+chmod 755 b/test
+(cd a; which ../b/test)
