@@ -65,7 +65,8 @@ perform_test () {
 	system($$0" 2>&1");
       }
     }' "$TOP_SRCDIR/test/commands" > "$TOP_BUILDDIR/test/.testout";
-    /usr/bin/sudo /bin/rm -f cat xxx alias.list;
+    /usr/bin/sudo /bin/rm -f cat xxx alias.list b/test;
+    /bin/rmdir a b;
   )
 }
 

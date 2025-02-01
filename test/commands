@@ -87,6 +87,11 @@ whichtest ./xxx
 /usr/bin/sudo /bin/chgrp bin xxx
 whichtest ./xxx
 
+mkdir -p {a,b}
+touch b/test
+chmod 755 b/test
+(cd a; whichtest ../b/test)
+
 alias which='alias | whichtest --tty-only --read-alias --show-tilde --show-dot'
 alias test1='test1'
 alias test2='echo "test2" | cat | sort'
@@ -98,8 +103,3 @@ which test1
 which test2
 which test3
 which test4
-
-mkdir -p {a,b}
-touch b/test
-chmod 755 b/test
-(cd a; which ../b/test)

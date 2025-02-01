@@ -278,7 +278,7 @@ static char *path_clean_up(const char *path)
           strcpy(result, path);
           return result;
         }
-        if (!IS_DIRSEP(*p2))
+        if (IS_DIRSEP(*p2))
           ++cnt;
       }
       while (cnt != 3);
