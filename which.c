@@ -219,11 +219,13 @@ static void get_current_working_directory(void)
   if (cwdlen)
     return;
 
-  if (!getcwd(cwd, sizeof(cwd)))
+  if (!getcwd(cwd, sizeof(cwd) - 1))
   {
     const char *pwd = getenv("PWD");
-    if (pwd && strlen(pwd) < sizeof(cwd))
+    if (pwd && strlen(pwd) < sizeof(cwd) - 1)
       strcpy(cwd, pwd);
+    else
+      cwd[0] = '\0';
   }
 
   if (!IS_ABSOLUTE(cwd))
