@@ -245,7 +245,7 @@ static void get_current_working_directory(void)
 
 static char *path_clean_up(const char *path)
 {
-  static char result[PATH_MAX];
+  static char result[PATH_MAX + 1];
 
   const char *p1 = path;
   char *p2 = result;
@@ -267,7 +267,14 @@ static char *path_clean_up(const char *path)
      * See http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap04.html#tag_04_11
      */
     if (!saw_slash || !IS_DIRSEP(*p1) || (p1 == path + 1 && !IS_DIRSEP(p1[1])))
+    {
+      if (p2 >= result + sizeof(result) - 1)
+      {
+        fprintf(stderr, "Can't create full path\n");
+        exit(-1);
+      }
       *p2++ = *p1;
+    }
     if (saw_slash_dot && (IS_DIRSEP(*p1)))
       p2 -= 2;
     if (saw_slash_dot_dot && (IS_DIRSEP(*p1)))
