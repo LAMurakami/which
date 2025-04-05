@@ -574,7 +574,7 @@ int main(int argc, char *argv[])
     strncpy(home, h, sizeof(home));
     home[sizeof(home) - 1] = 0;
     homelen = strlen(home);
-    if (!IS_DIRSEP(home[homelen - 1]) && homelen < sizeof(home) - 1)
+    if (homelen == 0 || !IS_DIRSEP(home[homelen - 1]) && homelen < sizeof(home) - 1)
     {
       home[homelen] = DIR_SEPARATOR;
       home[homelen + 1] = '\0';
