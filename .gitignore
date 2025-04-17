@@ -46,3 +46,4 @@ m4/submodules.m4
 *.exe
 *.obj
 *.log
+*.o
